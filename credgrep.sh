@@ -23,6 +23,7 @@ function helpPanel(){
 	echo -e "${yellowColour} Usage:${endColour} credgrep${turquoiseColour} [options]${endColour}\n"
 	echo -e "${yellowColour} Options:${endColour}"
 	echo -e "\t${turquoiseColour} -h:${endColour} Shows the help panel"
+	echo -e "\t${turquoiseColour} -v:${endColour} Shows version"
 	echo -e "\t${turquoiseColour} -k [keyword]:${endColour} Keyword you want to look for (name, domain, password...)"
 	exit 0
 }
