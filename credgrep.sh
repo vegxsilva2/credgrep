@@ -28,13 +28,24 @@ function helpPanel(){
 }
 
 function search() {
+	echo -e "\n${yellowColour}[*] Searching${endColour}${turquoiseColour} '$KEYWORD'${endColour}${yellowColour} at the COMB${endColour}${greenColour} [Combination Of Many Breaches]${endColour}\n"
 
-    echo -e "\n${yellowColour}[*] Searching${endColour}${turquoiseColour} '$KEYWORD'${endColour}${yellowColour} at the COMB${endColour}${greenColour} [Combination Of Many Breaches]${endColour}\n"
-
-    # RealizaciÃ³n de la bÃºsqueda
-    echo -e "\n${turquoiseColour}Performing the search...${endColour}\n"
-    curl -s https://api.proxynova.com/comb?query="$KEYWORD"
+	echo -e "\n${turquoiseColour}Performing the search...${endColour}\n"
+	sleep 2
+	printf "%-50s %-15s\n" "        Username@Domain" "Password"
+	printf "%-50s %-15s\n" "        --------------------------" "---------------"
+	curl -s "https://api.proxynova.com/comb?query=$KEYWORD" | head -n -2 | awk -F ":" 'NR > 3  {
+			gsub(/"/, "", $1);    # Elimina comillas dobles del nombre de usuario
+			gsub(/"/, "", $2);    # Elimina comillas dobles de la contraseña
+			gsub(/,/, "", $2);    # Elimina la coma al final de la contraseña
+			printf "%-50s %-15s\n", $1, $2   # Formato de salida alineado
+		}'
 }
+
+function version(){
+	echo -e "Credgrep Version 1.0\tAuthor: vegxsilva"
+}
+
 
 # Check if no arguments were provided and show help
 if [ "$#" -eq 0 ]; then
@@ -43,7 +54,7 @@ if [ "$#" -eq 0 ]; then
 fi
 
 # Main application
-while getopts ":k:h" opts; do
+while getopts ":k:h:v" opts; do
     case $opts in
         k)
             if [ -z "$OPTARG" ]; then
@@ -60,6 +71,9 @@ while getopts ":k:h" opts; do
             banner
             helpPanel
             ;;
+	v)
+	    version
+	    ;;
         \?)
             echo -e "${redColour}Invalid option: -$OPTARG${endColour}" 1>&2
             banner
